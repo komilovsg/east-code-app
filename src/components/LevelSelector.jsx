@@ -5,19 +5,25 @@ export default function LevelSelector({ levels, selected, onSelect, progress }) 
     <div className="level-list">
       <h2>Уровни</h2>
       <ul>
-        {levels.map(level => (
-          <li
-            key={level.id}
-            className={"level-item " + (selected === level.id ? 'active' : '')}
-            onClick={() => onSelect(level.id)}
-          >
-            <div className="level-meta">
-              <strong>{level.title}</strong>
-              <span className="status">{progress[level.id] ? '✓' : '●'}</span>
-            </div>
-            <div className="level-desc">{level.description}</div>
-          </li>
-        ))}
+        {levels.map(level => {
+          const isDone = !!progress[level.id]
+          const isActive = selected === level.id
+          const cls = [
+            'level-item',
+            isActive ? 'active' : '',
+            isDone ? 'done-item' : '',
+          ].filter(Boolean).join(' ')
+          return (
+            <li key={level.id} className={cls} onClick={() => onSelect(level.id)}>
+              <div className="level-meta">
+                <span className="status">
+                  {isDone ? '✓' : isActive ? '▶' : '○'}
+                </span>
+                <strong title={level.title}>{level.title}</strong>
+              </div>
+            </li>
+          )
+        })}
       </ul>
     </div>
   )

@@ -1,20 +1,25 @@
 import React, { useRef, useState, useEffect } from 'react'
+import CodeMirror from '@uiw/react-codemirror'
+import { css as cssLang } from '@codemirror/lang-css'
+import { vscodeDark } from '@uiw/codemirror-theme-vscode'
 
 export default function EditorPreview({ level, onComplete, completed, onUseHint }) {
-  const [css, setCss] = useState(level.template)
+  const [code, setCode] = useState(level.template)
   const previewRef = useRef(null)
   const styleRef = useRef(null)
   const [message, setMessage] = useState('')
+  const [messageType, setMessageType] = useState('info')
   const [showHint, setShowHint] = useState(false)
   const [hintUsed, setHintUsed] = useState(false)
 
   useEffect(() => {
-    setCss(level.template)
+    setCode(level.template)
     setMessage('')
+    setShowHint(false)
+    setHintUsed(false)
   }, [level.id])
 
   useEffect(() => {
-    // ensure a style tag exists inside preview root
     const root = previewRef.current
     if (!root) return
     let st = root.querySelector('#injected-style')
@@ -24,23 +29,26 @@ export default function EditorPreview({ level, onComplete, completed, onUseHint 
       root.appendChild(st)
     }
     styleRef.current = st
-    st.textContent = css
-  }, [css, level.id])
+    st.textContent = code
+  }, [code, level.id])
 
   function runPreview() {
-    if (styleRef.current) styleRef.current.textContent = css
+    if (styleRef.current) styleRef.current.textContent = code
     setMessage('Стиль применён')
+    setMessageType('info')
   }
 
   function checkLevel() {
-    if (styleRef.current) styleRef.current.textContent = css
+    if (styleRef.current) styleRef.current.textContent = code
     const root = previewRef.current
     const ok = level.validator(root)
     if (ok) {
-      setMessage('Уровень пройден!')
+      setMessage('✓ Уровень пройден!')
+      setMessageType('ok')
       onComplete()
     } else {
-      setMessage('Пока не верно — попробуй ещё')
+      setMessage('✗ Пока не верно — попробуй ещё')
+      setMessageType('error')
     }
   }
 
@@ -54,21 +62,64 @@ export default function EditorPreview({ level, onComplete, completed, onUseHint 
 
   return (
     <div className="editor-preview">
-      <div className="editor-pane">
-        <h3>{level.title} {completed ? <span className="badge">Готово</span> : null}</h3>
-        <p className="hint">{level.hint}</p>
-        <textarea value={css} onChange={e => setCss(e.target.value)} />
-        <div className="controls">
-          <button onClick={runPreview}>Run</button>
-          <button onClick={checkLevel}>Check</button>
-          <button onClick={handleShowHint} className="hint-btn">Подсказка (-10)</button>
-        </div>
-        <div className="message">{message}</div>
-        {showHint ? <div className="hint-box">{level.hint}</div> : null}
+      <div className="level-header-bar">
+        <span className="level-header-title">{level.title}</span>
+        {completed && <span className="badge">✓ Готово</span>}
+        <span className="level-header-desc">{level.description}</span>
       </div>
-      <div className="preview-pane">
-        <div className="preview-root" ref={previewRef}>
-          <div dangerouslySetInnerHTML={{ __html: level.html }} />
+
+      <div className="ep-split">
+        <div className="editor-pane">
+          <div className="tab-bar">
+            <div className="file-tab">
+              <span className="file-tab-icon">◈</span>
+              <span>styles.css</span>
+            </div>
+          </div>
+
+          <div className="editor-scroll">
+            <CodeMirror
+              value={code}
+              height="100%"
+              extensions={[cssLang()]}
+              theme={vscodeDark}
+              onChange={(val) => setCode(val)}
+              basicSetup={{
+                lineNumbers: true,
+                highlightActiveLine: true,
+                highlightActiveLineGutter: true,
+                bracketMatching: true,
+                closeBrackets: true,
+                autocompletion: true,
+                indentOnInput: true,
+                foldGutter: false,
+                tabSize: 2,
+              }}
+            />
+          </div>
+
+          <div className="editor-controls">
+            <button className="btn btn-run" onClick={runPreview}>▶ Run</button>
+            <button className="btn btn-check" onClick={checkLevel}>✓ Check</button>
+            <button className="btn btn-hint" onClick={handleShowHint}>? Подсказка (-10)</button>
+            {message && <span className={`ep-message ${messageType}`}>{message}</span>}
+          </div>
+
+          {showHint && <div className="hint-box">{level.hint}</div>}
+        </div>
+
+        <div className="preview-pane">
+          <div className="preview-tab-bar">
+            <div className="preview-tab">
+              <span>⬡</span>
+              <span>Preview</span>
+            </div>
+          </div>
+          <div className="preview-scroll">
+            <div className="preview-root" ref={previewRef}>
+              <div dangerouslySetInnerHTML={{ __html: level.html }} />
+            </div>
+          </div>
         </div>
       </div>
     </div>

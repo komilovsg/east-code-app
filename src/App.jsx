@@ -5,9 +5,11 @@ import ProgressBar from './components/ProgressBar'
 import TrophyBar from './components/TrophyBar'
 import ScoreDisplay from './components/ScoreDisplay'
 import Toasts from './components/Toasts'
+import LandingPage from './components/LandingPage'
 import levels from './data/levels'
 
 export default function App() {
+  const [page, setPage] = useState('home')
   const [selected, setSelected] = useState(levels[0].id)
   const [progress, setProgress] = useState(() => {
     try {
@@ -24,37 +26,29 @@ export default function App() {
   function markCompleted(levelId) {
     setProgress(prev => {
       if (prev[levelId]) return prev
-      // award points only once
       setScore(s => s + 100)
       setRecentlyEarned(levelId)
-      // add toast
-      setToasts(t => [...t, { id: Date.now(), text: `Уровень пройден: ${levels.find(l => l.id===levelId).title}` }])
-      // schedule clear recent and toast removal
+      setToasts(t => [...t, { id: Date.now(), text: `Уровень пройден: ${levels.find(l => l.id === levelId).title}` }])
       setTimeout(() => setRecentlyEarned(null), 1500)
       setTimeout(() => setToasts(t => t.slice(1)), 2000)
-
-      // auto-advance to next incomplete level (after small delay to let animation show)
       setTimeout(() => {
         const idx = levels.findIndex(l => l.id === levelId)
         let next = null
         for (let i = idx + 1; i < levels.length; i++) {
-          if (!((progress && progress[levels[i].id]) || levels[i].id === levelId)) { next = levels[i].id; break }
+          if (!((prev && prev[levels[i].id]) || levels[i].id === levelId)) { next = levels[i].id; break }
         }
         if (!next) {
-          // try from start
           for (let i = 0; i < levels.length; i++) {
-            if (!((progress && progress[levels[i].id]) || levels[i].id === levelId)) { next = levels[i].id; break }
+            if (!((prev && prev[levels[i].id]) || levels[i].id === levelId)) { next = levels[i].id; break }
           }
         }
         if (next) setSelected(next)
       }, 700)
-
       return { ...prev, [levelId]: true }
     })
   }
 
-  function onUseHint(levelId) {
-    // deduct points for hint usage (min 0)
+  function onUseHint() {
     setScore(s => Math.max(0, s - 10))
   }
 
@@ -62,15 +56,27 @@ export default function App() {
     try { return parseInt(localStorage.getItem('css-quest-score') || '0', 10) } catch { return 0 }
   })
   const [recentlyEarned, setRecentlyEarned] = useState(null)
-
   useEffect(() => { localStorage.setItem('css-quest-score', String(score)) }, [score])
   const [toasts, setToasts] = useState([])
+
+  if (page === 'home') {
+    const done = levels.filter(l => progress[l.id]).length
+    return (
+      <LandingPage
+        onSelect={setPage}
+        cssProgress={{ done, total: levels.length }}
+      />
+    )
+  }
 
   return (
     <div className="app">
       <header className="header">
         <div className="title-left">
-          <h1>CSS Quest</h1>
+          <button className="back-btn" onClick={() => setPage('home')} title="На главную">
+            ←
+          </button>
+          <h1>🎨 CSS Quest</h1>
           <p>Тренируй базовые навыки CSS — от селекторов до медиазапросов</p>
         </div>
         <div className="title-right">
