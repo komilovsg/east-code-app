@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0f0f17"/>
+      <stop offset="100%" stop-color="#1a1a2e"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6C63FF"/>
+      <stop offset="100%" stop-color="#3BC4A5"/>
+    </linearGradient>
+    <linearGradient id="logo-grad" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#6C63FF"/>
+      <stop offset="100%" stop-color="#3BC4A5"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Grid lines subtle -->
+  <line x1="0" y1="210" x2="1200" y2="210" stroke="#ffffff" stroke-opacity="0.03" stroke-width="1"/>
+  <line x1="0" y1="420" x2="1200" y2="420" stroke="#ffffff" stroke-opacity="0.03" stroke-width="1"/>
+  <line x1="400" y1="0" x2="400" y2="630" stroke="#ffffff" stroke-opacity="0.03" stroke-width="1"/>
+  <line x1="800" y1="0" x2="800" y2="630" stroke="#ffffff" stroke-opacity="0.03" stroke-width="1"/>
+
+  <!-- Glowing orb left -->
+  <circle cx="180" cy="315" r="200" fill="#6C63FF" fill-opacity="0.06"/>
+  <!-- Glowing orb right -->
+  <circle cx="1050" cy="200" r="160" fill="#3BC4A5" fill-opacity="0.06"/>
+
+  <!-- Left accent bar -->
+  <rect x="0" y="0" width="6" height="630" fill="url(#accent)"/>
+
+  <!-- Logo box -->
+  <rect x="80" y="200" width="120" height="120" rx="26" fill="url(#logo-grad)"/>
+  <text x="96" y="247" font-family="monospace" font-weight="900" font-size="28" fill="rgba(255,255,255,0.5)">&lt;/&gt;</text>
+  <text x="90" y="298" font-family="monospace" font-weight="900" font-size="42" fill="white">EC</text>
+
+  <!-- Brand name -->
+  <text x="224" y="268" font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="72" fill="white">EastCode</text>
+
+  <!-- Tagline -->
+  <text x="224" y="316" font-family="system-ui, -apple-system, sans-serif" font-weight="400" font-size="28" fill="#a0a0c0">Учи веб-разработку бесплатно</text>
+
+  <!-- Divider -->
+  <rect x="80" y="360" width="600" height="2" rx="1" fill="url(#accent)" opacity="0.4"/>
+
+  <!-- Tech badges -->
+  <!-- HTML badge -->
+  <rect x="80" y="390" width="130" height="48" rx="10" fill="rgba(227,76,38,0.15)" stroke="rgba(227,76,38,0.4)" stroke-width="1.5"/>
+  <text x="108" y="422" font-family="monospace" font-weight="700" font-size="22" fill="#e34c26">&lt;/&gt; HTML</text>
+
+  <!-- CSS badge -->
+  <rect x="226" y="390" width="120" height="48" rx="10" fill="rgba(81,154,186,0.15)" stroke="rgba(81,154,186,0.4)" stroke-width="1.5"/>
+  <text x="248" y="422" font-family="monospace" font-weight="700" font-size="22" fill="#519aba">{ } CSS</text>
+
+  <!-- JS badge -->
+  <rect x="362" y="390" width="160" height="48" rx="10" fill="rgba(247,223,30,0.1)" stroke="rgba(247,223,30,0.3)" stroke-width="1.5"/>
+  <text x="384" y="422" font-family="monospace" font-weight="700" font-size="22" fill="#f7df1e">JS  JavaScript</text>
+
+  <!-- Stats right side -->
+  <text x="820" y="270" font-family="system-ui, sans-serif" font-weight="700" font-size="28" fill="#6C63FF">🌐</text>
+  <text x="860" y="270" font-family="system-ui, sans-serif" font-weight="400" font-size="24" fill="#a0a0c0">На русском и таджикском</text>
+
+  <text x="820" y="320" font-family="system-ui, sans-serif" font-weight="700" font-size="28" fill="#3BC4A5">✓</text>
+  <text x="860" y="320" font-family="system-ui, sans-serif" font-weight="400" font-size="24" fill="#a0a0c0">60+ практических задач</text>
+
+  <text x="820" y="370" font-family="system-ui, sans-serif" font-weight="700" font-size="28" fill="#ffd93d">🚀</text>
+  <text x="860" y="370" font-family="system-ui, sans-serif" font-weight="400" font-size="24" fill="#a0a0c0">Бесплатно · Без регистрации</text>
+
+  <!-- Bottom URL -->
+  <text x="80" y="590" font-family="monospace" font-size="20" fill="#4a4a6a">eastcode.vercel.app</text>
+</svg>
