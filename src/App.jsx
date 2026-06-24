@@ -8,6 +8,8 @@ import Toasts from './components/Toasts'
 import LandingPage from './components/LandingPage'
 import RoadmapPage from './components/RoadmapPage'
 import LanguageSwitcher from './components/LanguageSwitcher'
+import DevQuestPage from './components/DevQuestPage'
+import LessonPage from './components/LessonPage'
 import cssLevels from './data/css-levels'
 import htmlLevels from './data/html-levels'
 import jsLevels from './data/js-levels'
@@ -106,11 +108,22 @@ function AppInner() {
     }
   }
 
+  // ── Special full-screen pages ──
+  if (page === 'devquest') {
+    return <DevQuestPage onBack={() => setPage('home')} />
+  }
+
+  if (page === 'lesson') {
+    return <LessonPage onBack={() => setPage('home')} />
+  }
+
   if (page === 'home') {
     return (
       <LandingPage
         onSelect={handleSelectModule}
         onRoadmap={() => setPage('roadmap')}
+        onDevQuest={() => setPage('devquest')}
+        onLesson={() => setPage('lesson')}
         progress={moduleProgress}
         onReset={handleResetProgress}
       />
